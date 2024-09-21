@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     private CharacterController characterController;
+    private Animator animator;
 
     [Header("Stats")]
     [SerializeField] private float lookSpeed = 100f;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
         Camera _camera = GetComponentInChildren<Camera>();
         cameraTransform = _camera.gameObject.transform;
     }
@@ -63,7 +65,9 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         // Calculate movement
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        Vector3 move = transform.right *0.7f * moveInput.x + transform.forward * moveInput.y;
+        animator.SetFloat("ForwardVelocity", moveInput.y);
+        animator.SetFloat("RightVelocity", moveInput.x);
         float speed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : walkSpeed);
         characterController.Move(move * speed * Time.deltaTime);
     }
