@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private Transform cameraTransform;
     private float verticalLookRotation;
+    public float pushPower = 50.0F;
 
 
     void Awake()
@@ -124,5 +125,42 @@ public class PlayerController : MonoBehaviour
         float currentHeight = isCrouching ? crouchHeight : standingHeight;
         characterController.height = currentHeight;
         cameraTransform.localPosition = new Vector3(cameraTransform.localPosition.x, currentHeight, cameraTransform.localPosition.z);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody body = hit.collider.attachedRigidbody;
+        var Script = hit.collider.GetComponent<ItemHealth>();  
+
+        // no rigidbody
+        if (body == null || body.isKinematic)
+            return;
+
+        // We dont want to push objects below us
+        //if (hit.moveDirection.y < -0.3f)
+         //   return;
+
+        // Calculate push direction from move direction,
+        // we only push objects to the sides never up and down
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, hit.moveDirection.y, hit.moveDirection.z);
+
+        // If you know how fast your character is trying to move,
+        // then you can also multiply the push velocity by that.
+
+        // Apply the push
+        body.velocity = pushDir * pushPower;
+        Script.ItemHit(); 
+
+
+         if (hit.gameObject.tag == "Glass")
+        {
+            Debug.Log("Glass"); 
+        }
+
+        if (hit.gameObject.tag == "Wood")
+        {
+            Debug.Log("Wood");
+        }
+
     }
 }
