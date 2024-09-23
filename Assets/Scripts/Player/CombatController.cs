@@ -53,6 +53,10 @@ public class CombatController : MonoBehaviour
         {
             HitTarget(hit.point);
 
+        //Animations here
+        //https://www.youtube.com/watch?v=yZhKUViKS_w
+        //but will need to be adapted as tutorial didnt use animation layers.
+        //going to try to do monday evening
         }
     }
 
