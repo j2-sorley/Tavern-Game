@@ -1271,7 +1271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 244b8556f129e9b4481aaea6067e7b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookSpeed: 100
+  lookSpeed: 35
   walkSpeed: 5
   sprintSpeed: 7
   crouchSpeed: 3
@@ -1283,6 +1283,7 @@ MonoBehaviour:
   isJumping: 0
   isSprinting: 0
   isCrouching: 0
+  pushPower: 20
 --- !u!114 &4807744532419576497
 MonoBehaviour:
   m_ObjectHideFlags: 0
