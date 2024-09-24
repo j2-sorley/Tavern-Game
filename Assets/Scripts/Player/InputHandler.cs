@@ -39,6 +39,9 @@ public class InputHandler : MonoBehaviour
         //playerControls.Player.Interact.performed += ctx => playerInteraction.Interact();
         playerControls.Player.Scroll.performed += OnScroll;
         playerControls.Player.Scroll.canceled += OnScroll;
+        //Item pick up
+        playerControls.Player.Interact.performed += ctx => playerController.isPickup = ctx.ReadValueAsButton();
+        playerControls.Player.Interact.canceled += ctx => playerController.isPickup = ctx.ReadValueAsButton();
     }
 
     void OnDisable()
@@ -102,4 +105,12 @@ public class InputHandler : MonoBehaviour
         //player_cam.SetActive(false);
         playerControls.Player.Disable();
     }
+
+    /*public void OnPickup(bool isPickupPressed)
+    {
+        if (isPickupPressed)
+        {
+            playerController.Pickup();
+        }
+    }*/
 }

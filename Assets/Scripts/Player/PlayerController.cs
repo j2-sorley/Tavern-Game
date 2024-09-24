@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isJumping;
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isCrouching;
+    //Item pick up
+    [HideInInspector] public bool item_not_in_hand;
+    [HideInInspector] public bool isPickup;
+    [SerializeField] Rigidbody _heldItem;
+    [SerializeField] public Transform holdSpace;
 
     // Logic variables
     private float gravity = -9.81f;
@@ -39,6 +44,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         Camera _camera = GetComponentInChildren<Camera>();
         cameraTransform = _camera.gameObject.transform;
+        item_not_in_hand = true;
     }
 
 
@@ -162,5 +168,36 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Wood");
         }
 
+    }
+
+    //Item pick up
+    void Pickup(InputAction.CallbackContext context)
+    {
+        Ray ray = new Ray(this.cameraTransform.position, this.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 0.5f))
+        {
+            Rigidbody objectRb = hit.rigidbody;
+
+            if (objectRb != null)
+            {
+                _heldItem = _heldItem == objectRb ? null : objectRb;
+            }
+            if (hit.transform.gameObject.tag == "Grabbable" && item_not_in_hand == true)
+            {
+                hit.transform.SetPositionAndRotation(holdSpace.transform.position, holdSpace.transform.rotation);
+                hit.transform.parent = holdSpace.transform;
+                objectRb.useGravity = false;
+                item_not_in_hand = false;
+            }
+
+            else if (_heldItem != null)
+            {
+                hit.transform.parent = null;
+                objectRb.useGravity = true;
+                item_not_in_hand = true;
+            }
+        }
     }
 }
