@@ -8,8 +8,8 @@ public class ItemHealth : MonoBehaviour
 
     public int Health;
     public bool Cooldown;
-    AudioClip[] Hitsounds;
-    AudioClip[] Breaksounds;
+    public AudioClip[] Hitsounds;
+    public AudioClip[] Breaksounds;
     public AudioSource Audio;
     public int random; 
     
@@ -38,8 +38,17 @@ public class ItemHealth : MonoBehaviour
                 random = Random.Range(0, Breaksounds.Length);
                 Audio.clip = Breaksounds[random];
                 Audio.Play();
+                 
+                // Add Object Fracturing Here
+
+                StartCoroutine(ObjectDestroy()); 
+                IEnumerator ObjectDestroy()
+                {
+                    yield return new WaitForSeconds(2); 
+                    Destroy(gameObject);
+                }
                 
-                Destroy(gameObject);
+                
             }
 
 
