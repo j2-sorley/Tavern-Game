@@ -160,12 +160,12 @@ public class PlayerController : MonoBehaviour
 
          if (hit.gameObject.tag == "Glass")
         {
-            Debug.Log("Glass"); 
+            //Debug.Log("Glass"); 
         }
 
         if (hit.gameObject.tag == "Wood")
         {
-            Debug.Log("Wood");
+            //Debug.Log("Wood");
         }
 
     }

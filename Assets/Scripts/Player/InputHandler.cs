@@ -9,6 +9,7 @@ public class InputHandler : MonoBehaviour
     /*private PlayerInteraction playerInteraction;
     private Inventory inventory;*/
     private PlayerControls playerControls;
+    private CombatController combatController;
     //[SerializeField] private GameObject player_cam;
 
     void Start()
@@ -19,6 +20,7 @@ public class InputHandler : MonoBehaviour
     void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        combatController = GetComponent<CombatController>();
         /*playerInteraction = GetComponent<PlayerInteraction>();
         inventory = GetComponent<Inventory>();*/
         playerControls = new PlayerControls();
@@ -36,13 +38,16 @@ public class InputHandler : MonoBehaviour
         playerControls.Player.Sprint.performed += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Sprint.canceled += ctx => playerController.isSprinting = ctx.ReadValueAsButton();
         playerControls.Player.Crouch.performed += ctx => ToggleCrouch(ctx.ReadValueAsButton());
-        //playerControls.Player.Interact.performed += ctx => playerInteraction.Interact();
+        // playerControls.Player.Interact.performed += ctx => playerInteraction.Interact();
         playerControls.Player.Scroll.performed += OnScroll;
         playerControls.Player.Scroll.canceled += OnScroll;
 
-        //pickupable items
+        // pickupable items
         playerControls.Player.Interact.performed += ctx => playerController.TryPickupItem();
         playerControls.Player.Interact.canceled += ctx => playerController.currentItem.Throw();
+
+        // attack
+        playerControls.Player.Attack.performed += ctx => combatController.Attack();
     }
 
     void OnDisable()

@@ -21,8 +21,8 @@ public class CombatController : MonoBehaviour
     public AudioClip attackSound;
     public AudioClip hitSound;
 
-    private bool attacking = false;
-    private bool readyToAttack = false;
+    [SerializeField] private bool attacking = false;
+    [SerializeField] private bool readyToAttack = true;
     int attackCount;
 
     void Awake()
@@ -30,11 +30,14 @@ public class CombatController : MonoBehaviour
         animator = GetComponent<Animator>();
         Camera _camera = GetComponentInChildren<Camera>();
         cameraTransform = _camera.gameObject.transform;
+        audioSource = GetComponent<AudioSource>();
     }
     public void Attack()
     {
+
         // Checks
         if (!readyToAttack || attacking) return;
+        Debug.Log("Attack");
         readyToAttack = false;
         attacking = true;
 
@@ -45,18 +48,22 @@ public class CombatController : MonoBehaviour
         //Sounds
         audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.PlayOneShot(attackSound);
+
+        attackCount++;
+        StartAnimation("Attack", (attackCount % 2));
     }
 
     void AttackRaycast()
     {
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, attackDistance, attackLayer))
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, attackDistance))
         {
             HitTarget(hit.point);
-
-        //Animations here
-        //https://www.youtube.com/watch?v=yZhKUViKS_w
-        //but will need to be adapted as tutorial didnt use animation layers.
-        //going to try to do monday evening
+            Debug.Log(hit.transform.gameObject.name);
+            if (hit.transform.TryGetComponent<NPCController>(out NPCController npc))
+            {
+                Debug.Log("NPC found");
+                npc.TakeHit(attackDamage);
+            }
         }
     }
 
@@ -73,5 +80,11 @@ public class CombatController : MonoBehaviour
     {
         readyToAttack = true;
         attacking = false;
+    }
+
+    public void StartAnimation(string triggerName, int punchIndex)
+    {
+        animator.SetFloat("PunchIndex", punchIndex);
+        animator.SetTrigger(triggerName);
     }
 }
