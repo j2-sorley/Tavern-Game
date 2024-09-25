@@ -32,6 +32,12 @@ public class PlayerController : MonoBehaviour
     private float verticalLookRotation;
     public float pushPower = 50.0F;
 
+    //pickable item
+    [SerializeField] public GameObject hand;
+    [SerializeField] public float reachDistance = 4f;
+
+    public PickableItem currentItem;
+
 
     void Awake()
     {
@@ -163,4 +169,42 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    public void TryPickupItem()
+    {
+        Debug.Log("hello");
+        // Check if the item is already holding
+        if (currentItem != null)
+        {
+            Debug.Log("You already have the item in your hands.");
+            return;
+        }
+
+        // Checking if there is a hand object
+        if (hand == null)
+        {
+            Debug.LogError("Hand object is not assigned.");
+            return;
+        }
+
+        // Create a beam forward from the player
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
+        // Checking if the beam hits something
+        if (Physics.Raycast(ray, out hit, reachDistance))
+        {
+            // Checking if an object has a PickupableItem component
+            var item = hit.collider.GetComponent<PickableItem>();
+            Debug.Log("this");
+            if (item != null)
+            {
+                // Calling the method for picking up an object
+                item.PickUp(hand.transform);
+                currentItem = item;
+            }
+        }
+    }
+
+
 }

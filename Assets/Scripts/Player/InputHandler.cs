@@ -39,6 +39,10 @@ public class InputHandler : MonoBehaviour
         //playerControls.Player.Interact.performed += ctx => playerInteraction.Interact();
         playerControls.Player.Scroll.performed += OnScroll;
         playerControls.Player.Scroll.canceled += OnScroll;
+
+        //pickupable items
+        playerControls.Player.Interact.performed += ctx => playerController.TryPickupItem();
+        playerControls.Player.Interact.canceled += ctx => playerController.currentItem.Throw();
     }
 
     void OnDisable()

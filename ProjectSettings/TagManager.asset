@@ -8,6 +8,7 @@ TagManager:
   - Glass
   - Chair
   - Wood
+  - Grabbable
   layers:
   - Default
   - TransparentFX
