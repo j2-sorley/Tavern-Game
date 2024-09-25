@@ -10,6 +10,7 @@ public class InputHandler : MonoBehaviour
     private Inventory inventory;*/
     private PlayerControls playerControls;
     private CombatController combatController;
+    [SerializeField]private SceneLoader loader;
     //[SerializeField] private GameObject player_cam;
 
     void Start()
@@ -21,6 +22,7 @@ public class InputHandler : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         combatController = GetComponent<CombatController>();
+        loader = FindAnyObjectByType<SceneLoader>();
         /*playerInteraction = GetComponent<PlayerInteraction>();
         inventory = GetComponent<Inventory>();*/
         playerControls = new PlayerControls();
@@ -48,6 +50,9 @@ public class InputHandler : MonoBehaviour
 
         // attack
         playerControls.Player.Attack.performed += ctx => combatController.Attack();
+
+        // quit
+        playerControls.Player.Escape.performed += ctx => loader.OnQuit();
     }
 
     void OnDisable()
